@@ -2,13 +2,27 @@ package com.demo.config;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 @Configuration
 public class Config {
+	
+	@Value("${URL}")
+	private String url;
+	
+	@Value("${NAME}")
+	private String name;
+	
+	@Value("${PASSWORD}")
+	private String password;
 	
 	@Bean
 	public BCryptPasswordEncoder bcrypt() {
@@ -23,4 +37,15 @@ public class Config {
 		cors.setAllowedOrigins(List.of("*"));
 		return cors;
 	}
+	
+	@Bean
+	public DataSource dataSourceConfiguration() {
+		HikariDataSource dataSource = new HikariDataSource();
+		dataSource.setJdbcUrl(url);
+		dataSource.setUsername(name);
+		dataSource.setPassword(password);
+		dataSource.setConnectionTimeout(1000); // nentuin waktu buat nyuruh hikari nunggu sampai dia tau kalau gak bakal bisa konek
+		return dataSource;
+	}
+	
 }

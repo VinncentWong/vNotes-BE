@@ -48,7 +48,8 @@ public class UserService {
 			throw new UserNotFoundException();
 		}
 		User user = optUser.get();
-		if(bcrypt.matches(dto.getPassword(), user.getPassword())) {}
+		if(bcrypt.matches(dto.getPassword(), user.getPassword())) {
+		}
 		return null;
 	}
 	

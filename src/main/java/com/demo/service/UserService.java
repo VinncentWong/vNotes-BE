@@ -15,8 +15,10 @@ import com.demo.domain.dto.RegistrationDto;
 import com.demo.domain.entity.Response;
 import com.demo.domain.entity.Role;
 import com.demo.domain.entity.User;
+import com.demo.exception.UserNotAuthenticatedException;
 import com.demo.exception.UserNotFoundException;
 import com.demo.repository.UserRepository;
+import com.demo.util.JwtUtil;
 
 @Service
 @Transactional
@@ -26,10 +28,12 @@ public class UserService {
 	
 	private final BCryptPasswordEncoder bcrypt;
 	
+	private final JwtUtil util;
 	@Autowired
-	public UserService(UserRepository repo, BCryptPasswordEncoder bcrypt) {
+	public UserService(UserRepository repo, BCryptPasswordEncoder bcrypt, JwtUtil util) {
 		this.repo = repo;
 		this.bcrypt = bcrypt;
+		this.util = util;
 	}
 	
 	public ResponseEntity<Response> registerUser(RegistrationDto dto){
@@ -42,15 +46,17 @@ public class UserService {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("success create user", true, result, null));
 	}
 	
-	public ResponseEntity<Response> loginUser(LoginDto dto) throws UserNotFoundException{
+	public ResponseEntity<Response> loginUser(LoginDto dto) throws UserNotFoundException, UserNotAuthenticatedException{
 		Optional<User> optUser = repo.getUserByEmail(dto.getEmail());
 		if(optUser.isEmpty()) {
 			throw new UserNotFoundException();
 		}
 		User user = optUser.get();
 		if(bcrypt.matches(dto.getPassword(), user.getPassword())) {
+			String token = util.generateToken(user);
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("user authenticated!", true, user, token));
 		}
-		return null;
+		throw new UserNotAuthenticatedException();
 	}
 	
 }

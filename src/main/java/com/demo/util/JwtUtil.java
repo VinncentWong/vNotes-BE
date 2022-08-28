@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtUtil {
 	
-	@Value("SECRET_KEY")
+	@Value("${SECRET_KEY}")
 	private String secretKey;
 	
 	public String generateToken(User user) {

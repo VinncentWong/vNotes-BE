@@ -2,6 +2,7 @@ package com.demo.domain.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,10 +27,13 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "name")
 	private String name;
 	
+	@Column(name = "password")
 	private String password;
 	
+	@Column(name = "email")
 	private String email;
 	
 	@Enumerated(EnumType.STRING)

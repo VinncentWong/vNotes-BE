@@ -10,7 +10,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().mvcMatchers("/user/login, /user/registration");
+		web.ignoring().mvcMatchers("/user/login", "/user/registration");
 	}
 
 	@Override

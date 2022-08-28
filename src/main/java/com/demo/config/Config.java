@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,7 @@ public class Config {
 		CorsConfiguration cors = new CorsConfiguration();
 		cors.setAllowedHeaders(List.of("*"));
 		cors.setAllowedMethods(List.of("POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"));
-		cors.setAllowedOrigins(List.of("*"));
+		cors.setAllowedOrigins(List.of("http://localhost:4200"));
 		return cors;
 	}
 	

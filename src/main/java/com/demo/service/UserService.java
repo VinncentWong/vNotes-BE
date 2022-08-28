@@ -38,7 +38,7 @@ public class UserService {
 	
 	public ResponseEntity<Response> registerUser(RegistrationDto dto){
 		User user = new User();
-		user.setName(dto.getUsername());
+		user.setUsername(dto.getUsername());
 		user.setPassword(bcrypt.encode(dto.getPassword()));
 		user.setEmail(dto.getEmail());
 		user.setRole(Role.USER);

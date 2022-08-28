@@ -23,7 +23,7 @@ public class JwtUtil {
 	
 	public String generateToken(User user) {
 		Map<String,Object> map = new HashMap<>();
-		map.put("username", user.getName());
+		map.put("username", user.getUsername());
 		map.put("email", user.getEmail());
 		map.put("role", user.getRole());
 		map.put("exp", new Date(0, 0, 0, 24, 0));

@@ -44,6 +44,7 @@ public class Config {
 		dataSource.setJdbcUrl(url);
 		dataSource.setUsername(name);
 		dataSource.setPassword(password);
+		dataSource.setDriverClassName("org.postgresql.Driver");
 		dataSource.setConnectionTimeout(1000); // nentuin waktu buat nyuruh hikari nunggu sampai dia tau kalau gak bakal bisa konek
 		return dataSource;
 	}

@@ -11,6 +11,6 @@ import com.demo.domain.entity.User;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long>{
 	
-	@Query("SELECT * FROM user WHERE email = ?1")
+	@Query(value = "SELECT * FROM users WHERE email = ?1 LIMIT 1", nativeQuery = true)
 	Optional<User> getUserByEmail(String email);
 }

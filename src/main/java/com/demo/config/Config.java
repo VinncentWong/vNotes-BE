@@ -8,9 +8,13 @@ import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ClientRegistrations;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.web.cors.CorsConfiguration;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -26,6 +30,12 @@ public class Config {
 	
 	@Value("${PASSWORD}")
 	private String password;
+	
+	@Value("${CLIENT_ID}")
+	private String clientId;
+	
+	@Value("${CLIENT_SECRET}")
+	private String clientSecret;
 	
 	@Bean
 	public BCryptPasswordEncoder bcrypt() {
@@ -50,6 +60,25 @@ public class Config {
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		dataSource.setConnectionTimeout(1000); // nentuin waktu buat nyuruh hikari nunggu sampai dia tau kalau gak bakal bisa konek
 		return dataSource;
+	}
+	
+	@Bean
+	public ClientRegistration registrationClient() {
+		ClientRegistration common = CommonOAuth2Provider
+									.GOOGLE
+									.getBuilder("google")
+									.clientId(clientId)
+									.clientSecret(clientSecret)
+									.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+									.authorizationUri("/vNotes/authentication")
+									.scope("https://www.googleapis.com/auth/userinfo.email")
+									.build();
+		return common;
+	}
+	
+	@Bean
+	public ClientRegistrationRepository repository() {
+		return new InMemoryClientRegistrationRepository(registrationClient());
 	}
 	
 }

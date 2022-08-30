@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,14 +11,15 @@ import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.ClientRegistrations;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.web.cors.CorsConfiguration;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
+@Slf4j
 public class Config {
 	
 	@Value("${URL}")
@@ -64,18 +64,18 @@ public class Config {
 	
 	@Bean
 	public ClientRegistration registrationClient() {
+		log.info("registrasi client berjalan");
+		log.info("client id = " + clientId);
+		log.info("client secret = " + clientSecret);
 		ClientRegistration common = CommonOAuth2Provider
-									.GOOGLE
-									.getBuilder("google")
-									.clientId(clientId)
-									.clientSecret(clientSecret)
-									.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-									.authorizationUri("/vNotes/authentication")
-									.scope("https://www.googleapis.com/auth/userinfo.email")
-									.build();
+								.GOOGLE
+								.getBuilder("google")
+								.clientId(clientId)
+								.clientSecret(clientSecret)
+								.build();
 		return common;
 	}
-	
+
 	@Bean
 	public ClientRegistrationRepository repository() {
 		return new InMemoryClientRegistrationRepository(registrationClient());

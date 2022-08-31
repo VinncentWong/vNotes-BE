@@ -72,6 +72,8 @@ public class Config {
 								.getBuilder("google")
 								.clientId(clientId)
 								.clientSecret(clientSecret)
+								.clientName("vNotes")
+								.redirectUri("http://localhost:4200/home/login/oauth2/code/google")
 								.build();
 		return common;
 	}

@@ -39,6 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.oauth2Login((c) -> {
 			c.clientRegistrationRepository(config.repository());
 		})
+		.oauth2Login()
+		.and()
 		.csrf()
 		.disable()
 		.httpBasic()

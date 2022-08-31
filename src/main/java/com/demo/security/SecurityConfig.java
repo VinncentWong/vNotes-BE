@@ -37,10 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.cors()
 		.and()
 		.oauth2Login((c) -> {
-			c.clientRegistrationRepository(config.repository());
+			c.clientRegistrationRepository(config.repository())
+			.redirectionEndpoint((x) -> x.baseUri("http://localhost:8080/login/oauth2/code/google"));
 		})
-		.oauth2Login()
-		.and()
 		.csrf()
 		.disable()
 		.httpBasic()

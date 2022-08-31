@@ -73,7 +73,7 @@ public class Config {
 								.clientId(clientId)
 								.clientSecret(clientSecret)
 								.clientName("vNotes")
-								.redirectUri("http://localhost:4200/home/login/oauth2/code/google")
+								.redirectUri("http://localhost:8080/login/oauth2/code/google")
 								.build();
 		return common;
 	}
@@ -82,5 +82,4 @@ public class Config {
 	public ClientRegistrationRepository repository() {
 		return new InMemoryClientRegistrationRepository(registrationClient());
 	}
-	
 }

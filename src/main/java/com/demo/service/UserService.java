@@ -59,4 +59,9 @@ public class UserService {
 		throw new UserNotAuthenticatedException();
 	}
 	
+	public ResponseEntity<Response> getUserById(Long id) throws UserNotFoundException{
+		User user = repo.findById(id).orElseThrow(() -> new UserNotFoundException());
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("get user data", true, user, null));
+	}
+	
 }

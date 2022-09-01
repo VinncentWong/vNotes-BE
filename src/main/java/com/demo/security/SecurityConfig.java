@@ -40,6 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			c.clientRegistrationRepository(config.repository())
 			.redirectionEndpoint((x) -> x.baseUri("http://localhost:8080/login/oauth2/code/google"));
 		})
+		.authorizeRequests()
+		.mvcMatchers("/user/**")
+		.authenticated()
+		.and()
 		.csrf()
 		.disable()
 		.httpBasic()

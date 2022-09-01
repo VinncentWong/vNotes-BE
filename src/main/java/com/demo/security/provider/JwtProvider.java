@@ -25,7 +25,7 @@ public class JwtProvider implements AuthenticationProvider{
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String token = authentication.getName();
 		try {
-			Claims claims = Jwts.parser()
+			Jwts.parser()
 							.setSigningKey(Base64.getEncoder().encodeToString(secretKey.getBytes()))
 							.parseClaimsJws(token)
 							.getBody();

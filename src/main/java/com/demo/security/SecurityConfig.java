@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.demo.config.Config;
 
@@ -40,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			c.clientRegistrationRepository(config.repository())
 			.redirectionEndpoint((x) -> x.baseUri("http://localhost:8080/login/oauth2/code/google"));
 		})
+		.addFilterAt(config.jwtFilterBean(), UsernamePasswordAuthenticationFilter.class)
 		.authorizeRequests()
 		.mvcMatchers("/user/**")
 		.authenticated()

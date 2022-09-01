@@ -14,6 +14,9 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.web.cors.CorsConfiguration;
 
+import com.demo.security.filter.JwtFilter;
+import com.demo.security.manager.JwtManager;
+import com.demo.security.provider.JwtProvider;
 import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -81,5 +84,20 @@ public class Config {
 	@Bean
 	public ClientRegistrationRepository repository() {
 		return new InMemoryClientRegistrationRepository(registrationClient());
+	}
+	
+	@Bean
+	public JwtFilter jwtFilterBean() {
+		return new JwtFilter(jwtManagerBean());
+	}
+	
+	@Bean
+	public JwtManager jwtManagerBean() {
+		return new JwtManager(jwtProviderBean());
+	}
+	
+	@Bean
+	public JwtProvider jwtProviderBean() {
+		return new JwtProvider();
 	}
 }

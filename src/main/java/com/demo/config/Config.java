@@ -7,11 +7,15 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import com.demo.security.filter.JwtFilter;
@@ -23,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j
+@EnableWebSecurity
 public class Config {
 	
 	@Value("${URL}")
@@ -99,5 +104,21 @@ public class Config {
 	@Bean
 	public JwtProvider jwtProviderBean() {
 		return new JwtProvider();
+	}
+	
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.addFilterBefore(jwtFilterBean(), UsernamePasswordAuthenticationFilter.class)
+		.cors()
+		.and()
+//		.authorizeRequests()
+//		.mvcMatchers("/user/login", "/user/registration").permitAll()
+//		.anyRequest().authenticated()
+//		.and()
+		.formLogin()
+		.disable()
+		.csrf()
+		.disable();
+		return http.build();
 	}
 }

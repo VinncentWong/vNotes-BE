@@ -16,6 +16,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.demo.security.authentication.JwtAuthentication;
 import com.demo.security.manager.JwtManager;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter{
 	
 	private final JwtManager manager;
@@ -29,17 +32,32 @@ public class JwtFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String header = request.getHeader("Authorization");
-		if(!header.startsWith("Bearer ") || header == null) {
-			response.sendError(HttpStatus.BAD_REQUEST.value());
+		log.info("header = " + header);
+		if(header == null) {
+			response.sendError(HttpStatus.BAD_REQUEST.value(), "header Authorization dibutuhkan!");
 			return;
 		}
-		Authentication authentication = manager.authenticate(new JwtAuthentication(header.substring(7), null));
+		if(!header.startsWith("Bearer ")) {
+			response.sendError(HttpStatus.BAD_REQUEST.value(), "format header tidak valid!");
+			return;
+		}
+		Authentication authentication = this.manager.authenticate(new JwtAuthentication(header.substring(7), null));
 		if(!authentication.isAuthenticated()) {
-			response.sendError(HttpStatus.FORBIDDEN.value());
+			response.sendError(HttpStatus.BAD_REQUEST.value(), "header tidak valid!");
 			return;
 		}
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
+	}
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		String stringRequest = request.getRequestURL().toString();
+		if(stringRequest.endsWith("registration") || stringRequest.endsWith("login") || stringRequest.endsWith("checkhealth")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

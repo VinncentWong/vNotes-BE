@@ -7,6 +7,9 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.demo.security.provider.JwtProvider;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class JwtManager implements AuthenticationManager{
 	
 	private final JwtProvider provider;
@@ -18,6 +21,7 @@ public class JwtManager implements AuthenticationManager{
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		log.info("masuk ke jwt manager");
 		return provider.authenticate(authentication);
 	}
 	

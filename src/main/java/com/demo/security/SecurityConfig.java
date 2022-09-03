@@ -2,6 +2,8 @@
 //
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.core.Ordered;
+//import org.springframework.core.annotation.Order;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.builders.WebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +20,7 @@
 //
 //import lombok.extern.slf4j.Slf4j;
 //
+//@Order(value = Ordered.HIGHEST_PRECEDENCE)
 //@EnableWebSecurity
 //public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //	
@@ -42,16 +45,12 @@
 ////			c.clientRegistrationRepository(config.repository())
 ////			.redirectionEndpoint((x) -> x.baseUri("http://localhost:8080/login/oauth2/code/google"));
 ////		})
-//		.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+//		.addFilterAt(filter, UsernamePasswordAuthenticationFilter.class)
 //		.authorizeHttpRequests((c) -> {
 //			c.mvcMatchers("/checkhealth", "/user/login", "/user/authenticated").permitAll()
 //			.mvcMatchers("/user/**").authenticated();
 //		})
 //		.csrf()
-//		.disable()
-//		.httpBasic()
-//		.disable()
-//		.formLogin()
 //		.disable();
 //	}
 //}

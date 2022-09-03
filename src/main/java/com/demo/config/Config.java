@@ -7,8 +7,13 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -106,18 +111,23 @@ public class Config {
 		return new JwtProvider();
 	}
 	
+	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.addFilterBefore(jwtFilterBean(), UsernamePasswordAuthenticationFilter.class)
+		http.addFilterAt(jwtFilterBean(), UsernamePasswordAuthenticationFilter.class)
 		.cors()
 		.and()
-//		.authorizeRequests()
-//		.mvcMatchers("/user/login", "/user/registration").permitAll()
-//		.anyRequest().authenticated()
-//		.and()
+		.csrf()
+		.disable()
+		.authorizeHttpRequests()
+		.mvcMatchers("/user/login", "/user/registration", "/checkhealth")
+		.permitAll()
+		.mvcMatchers("/user/**")
+		.authenticated()
+		.and()
 		.formLogin()
 		.disable()
-		.csrf()
+		.httpBasic()
 		.disable();
 		return http.build();
 	}

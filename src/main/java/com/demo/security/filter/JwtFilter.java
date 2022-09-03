@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter{
 		String header = request.getHeader("Authorization");
 		log.info("header = " + header);
 		if(header == null) {
-			response.sendError(HttpStatus.BAD_REQUEST.value(), "header Authorization dibutuhkan!");
+			filterChain.doFilter(request, response);
 			return;
 		}
 		if(!header.startsWith("Bearer ")) {
@@ -48,16 +48,6 @@ public class JwtFilter extends OncePerRequestFilter{
 		}
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
-	}
-
-	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		String stringRequest = request.getRequestURL().toString();
-		if(stringRequest.endsWith("registration") || stringRequest.endsWith("login") || stringRequest.endsWith("checkhealth")) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 }

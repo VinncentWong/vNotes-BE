@@ -36,7 +36,7 @@ public class JwtProvider implements AuthenticationProvider{
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 			log.info("authenticated!");
-			return new JwtAuthentication(token, "", authorities);
+			return new JwtAuthentication(token, "");
 		}
 		catch(Exception ex) {
 			log.info("stack trace = " + ex.toString());

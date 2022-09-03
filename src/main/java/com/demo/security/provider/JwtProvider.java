@@ -13,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.demo.security.authentication.JwtAuthentication;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +35,7 @@ public class JwtProvider implements AuthenticationProvider{
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 			log.info("authenticated!");
-			return new JwtAuthentication(token, "");
+			return new JwtAuthentication(token, "", authorities);
 		}
 		catch(Exception ex) {
 			log.info("stack trace = " + ex.toString());
